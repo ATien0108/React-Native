@@ -12,6 +12,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {appColors} from '../constants/appColors';
 import {globalStyles} from '../style/globalStyles';
 import {Text} from 'react-native-gesture-handler';
+import SectionComponent from './SectionComponent';
 
 interface Props {
   value: string;
@@ -23,6 +24,8 @@ interface Props {
   allowClear?: boolean;
   type?: KeyboardType;
   onEnd?: () => void;
+  keyboardType?: KeyboardType;
+  editable?: boolean;
 }
 
 const InputComponent = (props: Props) => {
@@ -36,6 +39,7 @@ const InputComponent = (props: Props) => {
     allowClear,
     type,
     onEnd,
+    keyboardType,
   } = props;
 
   const [isShowPass, setIsShowPass] = useState(isPassword ?? false);

@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   View,
+  StyleSheet,
 } from 'react-native';
 import {TextComponent} from '.';
 import {appColors} from '../constants/appColors';
@@ -20,15 +21,16 @@ interface Props {
   title?: string;
   children: ReactNode;
   back?: boolean;
+  style?: any; // Thêm thuộc tính style vào đây để tùy chỉnh kiểu của ContainerComponent
 }
 
 const ContainerComponent = (props: Props) => {
-  const {children, isScroll, isImageBackground, title, back} = props;
+  const {children, isScroll, isImageBackground, title, back, style} = props;
   const navigation: any = useNavigation();
 
   const headerComponent = () => {
     return (
-      <View style={{flex: 1, padding: 30}}>
+      <View style={styles.header}>
         {(title || back) && (
           <RowComponent
             styles={{
@@ -60,29 +62,56 @@ const ContainerComponent = (props: Props) => {
   };
 
   const returnContainer = isScroll ? (
-    <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={[styles.scrollContainer, style]}
+      showsVerticalScrollIndicator={false}>
       {children}
     </ScrollView>
   ) : (
-    <View style={{flex: 1}}>{children}</View>
+    <View style={[styles.container, style]}>{children}</View>
   );
 
   return isImageBackground ? (
     <ImageBackground
       source={require('../assets/images/splash-img.png')}
-      style={{flex: 1}}
-      imageStyle={{flex: 1}}>
-      <SafeAreaView style={{flex: 1}}>
+      style={styles.imageBackground}
+      imageStyle={styles.imageStyle}>
+      <SafeAreaView style={styles.safeArea}>
         {headerComponent()}
         {returnContainer}
       </SafeAreaView>
     </ImageBackground>
   ) : (
-    <SafeAreaView style={globalStyles.container}>
+    <SafeAreaView style={[globalStyles.container, style]}>
       <View>{headerComponent()}</View>
       {returnContainer}
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+  },
+  header: {
+    flex: 1,
+    padding: 30,
+  },
+  scrollContainer: {
+    flex: 1,
+  },
+  imageBackground: {
+    flex: 1,
+  },
+  imageStyle: {
+    flex: 1,
+  },
+  safeArea: {
+    flex: 1,
+  },
+});
 
 export default ContainerComponent;
